@@ -1,3 +1,4 @@
+[![Deploy Pages](https://github.com/ruelickejustin/apsys-sqdc-ui/actions/workflows/deploy.yml/badge.svg)](https://github.com/ruelickejustin/apsys-sqdc-ui/actions/workflows/deploy.yml)
 # SQDC UI (Svelte + Tailwind + Vite)
 
 Modernes, druckbares SQDC-Board (A4 quer, fette Ziellinie, Monatsraster).
