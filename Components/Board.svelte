@@ -6,11 +6,10 @@
   export let month = '2025-11';
   export let days = 31;
 
-  // für Q/D/C
   export let yMax = 10;
   export let target = 3;
-  export let numeric = false;       // D kann auch binary sein
-  export let deliveryMode = 'binary';
+  export let numeric = false;        // für Q/C
+  export let deliveryMode = 'binary';// für D
 
   // Position der Ziellinie (oben=0%, unten=100%)
   $: targetPos = Math.max(0, Math.min(100, 100 - (target / (yMax || 1)) * 100));
@@ -32,12 +31,12 @@
       {#each Array(days) as _, i}
         <div class="day"><span>{i + 1}</span></div>
       {/each}
-      <!-- durchgehende, fette Ziellinie (nur Führung) -->
+      <!-- durchgehende, fette Ziellinie (nur Führung, keine Vorfärbung) -->
       <div class="target" style={`top:${targetPos}%`}></div>
     </div>
 
     <div class="legend">
-      <div>Manuell mit Stift ausfüllen: Tageswert pro Spalte eintragen/markieren. Grün/Rot erfolgt nur von Hand am Board.</div>
+      <div>Manuell mit Stift ausfüllen: Tageswert je Spalte einzeichnen. Farbe (grün/rot) erfolgt ausschließlich von Hand am Board.</div>
     </div>
   </div>
 </section>
@@ -51,6 +50,7 @@
     box-sizing: border-box;
     page-break-inside: avoid;
     margin-bottom: 16px;
+    background: #fff;
   }
   .hdr{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;}
   .hdr .t{ font-weight:700; font-size:18px;}
@@ -61,54 +61,28 @@
     position:relative;
     display:grid;
     grid-template-columns: repeat(31, 1fr);
-    grid-auto-rows: 140px;          /* Höhe des Zeichenbereichs */
+    grid-auto-rows: 140px;          /* Zeichenhöhe */
     border:1px solid #aaa;
+    background:
+      linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px) 0 0 / calc(100%/31) 100%,
+      linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px) 0 0 / 100% 20%;
   }
   .day{
-    border-left:1px solid #ddd;
-    border-right:1px solid #ddd;
     position:relative;
   }
   .day span{
     position:absolute; bottom:-18px; left:50%; transform:translateX(-50%);
     font-size:10px; color:#333;
   }
-  /* horizontale Hilfslinien (Matrix) */
-  .grid::before, .grid::after{
-    content:'';
-    position:absolute; left:0; right:0;
-    border-top:1px dashed #ccc;
-  }
-  .grid::before{ top:25%; }
-  .grid::after{ top:75%; }
-
   /* Fette, durchgehende Ziellinie – NUR Führung */
   .target{
     position:absolute; left:0; right:0; height:0;
     border-top:3px solid #C00000; /* gut sichtbar, durchgehend */
     pointer-events:none;
   }
-
   .legend{ font-size:11px; color:#444; margin-top:6px;}
   @media print{
-    body{ margin:0; }
+    body{ margin:0; background:#fff; }
     .board{ break-inside: avoid; }
   }
-</style>    {/if}
-
-    <div class="days-grid" style="grid-template-columns: repeat({days}, 1fr);">
-      {#each Array(days) as _, i}
-        <div class="day cell"><span class="num">{i+1}</span></div>
-      {/each}
-    </div>
-
-    {#if type === "D" && deliveryMode === "binary"}
-      <div class="binary-legend">Task Sequence: <b>Ja = grün</b> · <b>Nein = rot</b> (manuell markieren)</div>
-    {/if}
-  </div>
-
-  <div class="footer">
-    <div>Anleitung: Täglich IST-Wert einzeichnen. Ziel = fette, durchgängige Linie (falls numerisch).</div>
-    <div class="sign">ATL: ____________  Datum: ____________</div>
-  </div>
-</div>
+</style>
