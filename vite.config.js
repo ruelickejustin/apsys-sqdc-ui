@@ -3,6 +3,6 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [svelte()],
-  base: '/apsys-sqdc-ui/',   // <- genau so, mit deinem Repo-Namen
+  base: '/apsys-sqdc-ui/',
   build: { outDir: 'dist' }
 })
