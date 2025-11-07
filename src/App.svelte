@@ -6,25 +6,44 @@
   let atl = '';
   let month = new Date().toISOString().slice(0,7); // YYYY-MM
 
-  let yMaxQ = 10, targetQ = 3;
-  let yMaxD = 1,  targetD = 1, deliveryMode = 'binary';
+  let yMaxQ = 10,  targetQ = 3;
+  let yMaxD = 1,   targetD = 1, deliveryMode = 'binary';
   let yMaxC = 1.5, targetC = 1;
 
   $: days = getDays(month);
-  function getDays(mm){ const [y,m]=mm.split('-').map(Number); return new Date(y,m,0).getDate(); }
+
+  function getDays(mm){
+    const [y,m] = mm.split('-').map(Number);
+    return new Date(y, m, 0).getDate();
+  }
 
   function saveCfg(){
     const key = `sqdc:${project}:${ws}`;
-    localStorage.setItem(key, JSON.stringify({project,ws,atl,month,yMaxQ,targetQ,yMaxD,targetD,yMaxC,targetC,deliveryMode}));
+    localStorage.setItem(key, JSON.stringify({
+      project, ws, atl, month, yMaxQ, targetQ, yMaxD, targetD, yMaxC, targetC, deliveryMode
+    }));
     alert('Konfiguration gespeichert.');
   }
+
   function loadCfg(){
     const key = `sqdc:${project}:${ws}`;
     const raw = localStorage.getItem(key);
     if(!raw){ alert('Keine gespeicherte Konfiguration.'); return; }
     const v = JSON.parse(raw);
-    ({project,ws,atl,month,yMaxQ,targetQ,yMaxD,targetD,yMaxC,targetC,deliveryMode} = v);
+
+    project = v.project || '';
+    ws = v.ws || '';
+    atl = v.atl || '';
+    month = v.month || new Date().toISOString().slice(0,7);
+    yMaxQ = v.yMaxQ ?? 10;
+    targetQ = v.targetQ ?? 3;
+    yMaxD = v.yMaxD ?? 1;
+    targetD = v.targetD ?? 1;
+    yMaxC = v.yMaxC ?? 1.5;
+    targetC = v.targetC ?? 1;
+    deliveryMode = v.deliveryMode || 'binary';
   }
+
   function printBoards(){ window.print(); }
 </script>
 
@@ -35,6 +54,66 @@
 <section class="panel">
   <div class="grid">
     <label>Projekt<input bind:value={project} placeholder="z. B. ARF" /></label>
+    <label>Workstation<input bind:value={ws} placeholder="z. B. WS-01" /></label>
+    <label>ATL<input bind:value={atl} placeholder="Teamlead" /></label>
+    <label>Monat<input type="month" bind:value={month} /></label>
+  </div>
+
+  <div class="grid grid3">
+    <fieldset>
+      <legend>Q – Quality</legend>
+      <label>Y-Max<input type="number" step="0.1" bind:value={yMaxQ} /></label>
+      <label>Ziel<input type="number" step="0.1" bind:value={targetQ} /></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>D – Delivery</legend>
+      <label>Y-Max<input type="number" step="0.1" bind:value={yMaxD} /></label>
+      <label>Ziel<input type="number" step="0.1" bind:value={targetD} /></label>
+      <label>Modus
+        <select bind:value={deliveryMode}>
+          <option value="binary">Task Sequence (Ja/Nein)</option>
+          <option value="numeric">Numerisch</option>
+        </select>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>C – Cost</legend>
+      <label>Y-Max<input type="number" step="0.1" bind:value={yMaxC} /></label>
+      <label>Ziel<input type="number" step="0.1" bind:value={targetC} /></label>
+    </fieldset>
+  </div>
+
+  <div class="actions">
+    <button on:click={saveCfg}>Konfig speichern</button>
+    <button on:click={loadCfg}>Konfig laden</button>
+    <button class="primary" on:click={printBoards}>Drucken / PDF</button>
+  </div>
+</section>
+
+<section class="sheet">
+  <Board title="S – Safety"  {project} {ws} {atl} {month} {days} type="S" />
+  <Board title="Q – Quality" {project} {ws} {atl} {month} {days} type="Q" yMax={yMaxQ} target={targetQ} numeric={true} />
+  <Board title="D – Delivery" {project} {ws} {atl} {month} {days} type="D" yMax={yMaxD} target={targetD} deliveryMode={deliveryMode} />
+  <Board title="C – Cost"    {project} {ws} {atl} {month} {days} type="C" yMax={yMaxC} target={targetC} numeric={true} />
+</section>
+
+<style>
+  .top{ padding:8px 0; }
+  .panel{ border:1px solid #ddd; border-radius:8px; padding:12px; margin-bottom:12px; }
+  .grid{ display:grid; grid-template-columns: repeat(4, minmax(140px,1fr)); gap:10px; }
+  .grid3{ grid-template-columns: repeat(3, minmax(180px,1fr)); }
+  label{ display:flex; flex-direction:column; gap:4px; font-size:14px; }
+  input, select{ padding:6px 8px; border:1px solid #bbb; border-radius:6px; }
+  fieldset{ border:1px solid #bbb; border-radius:8px; padding:8px; }
+  legend{ padding:0 6px; font-weight:600; }
+  .actions{ display:flex; gap:8px; margin-top:10px; }
+  button{ padding:8px 10px; border:1px solid #333; background:#fff; border-radius:8px; }
+  .primary{ background:#0a66ff; color:#fff; border-color:#0a66ff; }
+  .sheet{ margin-top:12px; }
+  @media print{ .panel, .top{ display:none; } }
+</style>    <label>Projekt<input bind:value={project} placeholder="z. B. ARF" /></label>
     <label>Workstation<input bind:value={ws} placeholder="z. B. WS-01" /></label>
     <label>ATL<input bind:value={atl} placeholder="Teamlead" /></label>
     <label>Monat<input type="month" bind:value={month} /></label>
