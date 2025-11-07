@@ -40,6 +40,142 @@
 </script>
 
 <div class="wrap">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <h1>SQDC Board – Rohlinge</h1>
+    <div class="meta">
+      <span>{project || "Projekt"}</span> ·
+      <span>{ws || "Workstation"}</span> ·
+      <span>{atl || "ATL"}</span>
+    </div>
+  </header>
+
+  <!-- CONTROL PANEL -->
+  <section class="panel">
+    <div class="grid2">
+      <label>
+        Projekt
+        <input bind:value={project} placeholder="z. B. ARF" />
+      </label>
+      <label>
+        Workstation
+        <input bind:value={ws} placeholder="z. B. WS-01" />
+      </label>
+      <label>
+        ATL
+        <input bind:value={atl} placeholder="Teamlead" />
+      </label>
+      <label>
+        Monat
+        <input type="month" bind:value={month} />
+      </label>
+    </div>
+
+    <div class="grid3">
+      <fieldset>
+        <legend>Q – Quality</legend>
+        <label>
+          Y-Max
+          <input type="number" step="0.1" bind:value={yMaxQ} />
+        </label>
+        <label>
+          Ziel
+          <input type="number" step="0.1" bind:value={targetQ} />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>D – Delivery</legend>
+        <label>
+          Y-Max
+          <input type="number" step="0.1" bind:value={yMaxD} />
+        </label>
+        <label>
+          Ziel
+          <input type="number" step="0.1" bind:value={targetD} />
+        </label>
+        <label>
+          Modus
+          <select bind:value={deliveryMode}>
+            <option value="binary">Task Sequence (Ja/Nein)</option>
+            <option value="numeric">Numerisch</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>C – Cost</legend>
+        <label>
+          Y-Max
+          <input type="number" step="0.1" bind:value={yMaxC} />
+        </label>
+        <label>
+          Ziel
+          <input type="number" step="0.1" bind:value={targetC} />
+        </label>
+      </fieldset>
+    </div>
+
+    <div class="actions">
+      <button on:click={saveCfg}>Konfig speichern</button>
+      <button on:click={loadCfg}>Konfig laden</button>
+      <button class="primary" on:click={printBoards}>Drucken / PDF</button>
+    </div>
+  </section>
+
+  <!-- PRINT SHEET -->
+  <section class="sheet a4">
+    <Board
+      title="S – Safety"
+      project={project}
+      ws={ws}
+      atl={atl}
+      month={month}
+      days={days}
+      type="S" />
+
+    <Board
+      title="Q – Quality"
+      project={project}
+      ws={ws}
+      atl={atl}
+      month={month}
+      days={days}
+      type="Q"
+      yMax={yMaxQ}
+      target={targetQ}
+      numeric={true} />
+
+    <Board
+      title="D – Delivery"
+      project={project}
+      ws={ws}
+      atl={atl}
+      month={month}
+      days={days}
+      type="D"
+      yMax={yMaxD}
+      target={targetD}
+      deliveryMode={deliveryMode} />
+
+    <Board
+      title="C – Cost"
+      project={project}
+      ws={ws}
+      atl={atl}
+      month={month}
+      days={days}
+      type="C"
+      yMax={yMaxC}
+      target={targetC}
+      numeric={true} />
+  </section>
+</div>    deliveryMode = v.deliveryMode || "binary";
+  }
+  function printBoards(){ window.print(); }
+</script>
+
+<div class="wrap">
   <header class="topbar">
     <h1>SQDC Board – Rohlinge</h1>
     <div class="meta">
