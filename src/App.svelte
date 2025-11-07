@@ -1,5 +1,5 @@
 <script>
-  import Board from './components/Board.svelte';
+  import Board from './Components/Board.svelte';
 
   let project = '';
   let ws = '';
