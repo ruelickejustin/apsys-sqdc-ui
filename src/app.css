@@ -1,3 +1,36 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+:root {
+  --bg:#f5f7fb;
+  --line:#d7d7dd;
+  --grid:#e6e6ea;
+  --target:#d40000; /* fette, durchgängige Ziellinie */
+}
+
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; background:var(--bg); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:#111; }
+
+.wrap { max-width: 1120px; margin: 18px auto; padding: 0 12px; }
+.topbar { display:flex; justify-content:space-between; align-items:end; margin-bottom:12px; }
+.topbar h1 { margin:0; font-size:22px; }
+.topbar .meta { color:#666; font-size:13px; }
+
+.panel { background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; }
+.panel fieldset { border:1px solid var(--line); border-radius:10px; padding:10px; }
+.panel legend { padding:0 6px; font-weight:600; }
+.panel label { display:flex; gap:8px; align-items:center; margin:6px 0; }
+.panel input, .panel select { flex:1; padding:8px; border:1px solid var(--line); border-radius:8px; }
+.grid2 { display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; }
+.grid3 { display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; }
+.actions { display:flex; gap:8px; margin-top:10px; }
+button { padding:8px 12px; border-radius:8px; border:1px solid var(--line); background:#fff; }
+button.primary { background:#111; color:#fff; border-color:#111; }
+
+.sheet.a4 { margin-top:14px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px; }
+
+/* Drucklayout A4 Querformat */
+@media print {
+  @page { size: A4 landscape; margin: 10mm; }
+  body { background:#fff; }
+  .wrap { max-width: initial; margin:0; padding:0; }
+  .panel, .topbar { display:none; }
+  .sheet.a4 { border:none; padding:0; }
+}
