@@ -3,13 +3,14 @@ name: Build Windows EXE (Tauri)
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   build-windows:
     runs-on: windows-latest
     env:
       NODE_OPTIONS: --dns-result-order=ipv4first
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,7 +18,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install frontend deps
@@ -29,12 +30,21 @@ jobs:
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2
 
+      # Falls du Vite-Assets hast (empfohlen):
       - name: Build Vite (dist)
-        run: npm run build
+        run: npm run build --if-present
 
-      - name: Install Tauri CLI
-        run: npm i -g @tauri-apps/cli
+      # Kein globales CLI nötig
+      - name: Build Tauri (Windows, release)
+        run: npx tauri build
 
+      - name: Upload artifacts (EXE + Bundles)
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqdc-windows
+          path: |
+            src-tauri/target/release/*.exe
+            src-tauri/target/release/bundle/**/*
       - name: Build Tauri (Windows)
         working-directory: src-tauri
         run: tauri build
