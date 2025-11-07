@@ -1,0 +1,48 @@
+name: Build Windows EXE (Tauri)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    env:
+      NODE_OPTIONS: --dns-result-order=ipv4first
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install frontend deps
+        run: npm ci || npm install
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build Vite (dist)
+        run: npm run build
+
+      - name: Install Tauri CLI
+        run: npm i -g @tauri-apps/cli
+
+      - name: Build Tauri (Windows)
+        working-directory: src-tauri
+        run: tauri build
+
+      - name: Upload artifacts (EXE/MSI)
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqdc-windows
+          path: |
+            src-tauri/target/release/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
