@@ -1,8 +1,6 @@
-import { defineConfig } from "vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
-
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 export default defineConfig({
-  base: "/apsys-sqdc-ui/",
   plugins: [svelte()],
-  server: { host: true }
+  base: process.env.VITE_BASE || '/'
 });

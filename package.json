@@ -1,16 +1,19 @@
 {
   "name": "sqdc-ui",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --port 8080 --strictPort"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
-    "svelte": "^4.2.18",
-    "vite": "^5.4.0"
+    "@tailwindcss/postcss": "^4.1.17",
+    "autoprefixer": "^10.4.21",
+    "svelte": "^4.2.20",
+    "tailwindcss": "^4.1.17",
+    "vite": "^5.4.21"
   }
 }
