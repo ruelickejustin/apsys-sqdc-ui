@@ -1,0 +1,13 @@
+/* Warum: gestochen scharfer Druck auf A4 quer, UI-Controls ausblenden */
+@page {
+  size: A4 landscape;
+  margin: 10mm;
+}
+@media print {
+  html, body { height: auto; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .no-print { display: none !important; }
+  .page-break { break-after: page; }
+  /* Optionaler Rahmen für Trim-Sicherheit */
+  .print-safe { padding: 4mm; }
+}

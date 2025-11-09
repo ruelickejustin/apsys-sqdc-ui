@@ -1,4 +1,5 @@
 <script>
+  import ExportImportBar from "./components/ExportImportBar.svelte";
   import Topbar from "./components/Topbar.svelte";
   import { route } from "./lib/router";
   import Login from "./pages/Login.svelte";
@@ -19,6 +20,7 @@
     return Login;
   }
 </script>
+<ExportImportBar />
 
 <Topbar/>
 <svelte:component this={view()} />

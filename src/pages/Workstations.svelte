@@ -12,7 +12,7 @@
   <h1 class="text-2xl font-semibold mb-4">Workstation auswählen</h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     {#each list as w}
-      <div class="p-6 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 hover:bg-black/5 dark:hover:bg-white/10 transition cursor-pointer text-center" on:click={()=>open(w)}>
+      <div class="p-6 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-900 hover:bg-black/5 dark:hover:bg-white/10 transition cursor-pointer text-center" on:click={()= on:keydown={(e)=>{if(e.key==="Enter"||e.key===" "){{()=;}}} role="button" tabindex="0">open(w)}>
         <div class="text-3xl mb-2">🛠️</div>
         <div class="text-lg font-medium">{w.name}</div>
       </div>
